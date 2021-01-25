@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 	serv_adr.sin_port = htons(atoi(argv[2]));
 	
 	// TODO: connect() 
+	connect(sock, (struct sockaddr*)&serv_adr, sizeof(serv_adr));
 	
 	puts("Client is connected!");
 	
@@ -37,8 +38,10 @@ int main(int argc, char *argv[])
 	fgets(message, BUF_SIZE, stdin);
 
 	// TODO: 1. write message to server 
+	write(sock, message,BUF_SIZE);
 
 	// TODO: 4. read message from server 
+	read(sock, message, BUF_SIZE);
 	printf("Message from server: %s", message);
 	
 	close(sock);
