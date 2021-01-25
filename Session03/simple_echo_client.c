@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
 	serv_adr.sin_port = htons(atoi(argv[2]));
 	
 	// TODO: connect() 
-	connect(sock, (struct sockaddr*)&serv_adr, sizeof(serv_adr));
+	if(connect(sock, (struct sockaddr*)&serv_adr, sizeof(serv_adr)) ==-1)
+		error_handling("connect() error!");
 	
 	puts("Client is connected!");
 	
