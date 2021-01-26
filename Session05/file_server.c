@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 	
-	fp = fopen("file_server.c", "rb"); 
+	fp = fopen("hello.txt", "rb"); 
 	serv_sd = socket(PF_INET, SOCK_STREAM, 0);   
 	
 	memset(&serv_adr, 0, sizeof(serv_adr));
@@ -53,7 +53,8 @@ int main(int argc, char *argv[])
 	printf("Message from client: %s \n", buf);
 	
 	fclose(fp);
-	close(clnt_sd); close(serv_sd);
+	close(clnt_sd); 
+	close(serv_sd);
 	return 0;
 }
 

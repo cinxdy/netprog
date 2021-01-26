@@ -35,17 +35,26 @@ int main(int argc, char *argv[])
 	connect(sd, (struct sockaddr*)&serv_adr, sizeof(serv_adr));
 	
 	// TODO: Send file name to server 
-	
+	write(sd, file_name, BUF_SIZE);
 
 	// TODO: Send file data (Hint: file_server.c)
-	
-
-	printf("Recv %d bytes \n", read_size);
+	fp = fopen(file_name, "rb");
+	while(1){
+		read_cnt = fread((void*)buf, 1, BUF_SIZE, fp);
+		buf[read_cnt]=0;
+		read_size += read_cnt;
+		printf("Sent data: %s\n",buf);
+		write(sd, buf, read_cnt);
+		if (read_cnt < BUF_SIZE){
+			break;
+		}
+	}
+	printf("Sent %d bytes \n", read_size);
 
 	// TODO: shutdown 
-
+	shutdown(sd, SHUT_WR);
 	// TODO: read complete message from server 
-	
+	read(sd, buf, BUF_SIZE);
 	printf("Message from server: %s \n", buf);
 
 	fclose(fp);

@@ -38,14 +38,20 @@ int main(int argc, char *argv[])
 	clnt_sd = accept(serv_sd, (struct sockaddr*)&clnt_adr, &clnt_adr_sz);
 
 	// TODO: Receive file name 
+	read_cnt = read(clnt_sd, file_name, BUF_SIZE);
+	file_name[read_cnt]=0;
+	printf("Recieved file name: %s\n",file_name);
 
 	// TODO: Open file with received file name
+	fp = fopen("hello.dat", "wb");
+	while((read_cnt = read(clnt_sd, buf, BUF_SIZE))!=0)
+		fwrite(buf, 1, read_cnt, fp);
 	
 	// TODO: Receive file data from client 
-	
 	printf("Received file data: %s \n", file_name);
 	
 	// TODO: Send complete message to client 
+	write(clnt_sd, "Completed. Thank you.\n", BUF_SIZE);
 	
 	fclose(fp);
 	close(clnt_sd); 

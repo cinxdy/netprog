@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	FILE *fp;
 	
 	char buf[BUF_SIZE];
+	char file_name[] = "receive.dat";
 	int read_cnt;
 	struct sockaddr_in serv_adr;
 	if (argc != 3) {
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 	
-	fp = fopen("receive.dat", "wb");
+	fp = fopen(file_name, "wb");
 	sd = socket(PF_INET, SOCK_STREAM, 0);   
 
 	memset(&serv_adr, 0, sizeof(serv_adr));
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
 	while ((read_cnt=read(sd, buf, BUF_SIZE )) != 0)
 		fwrite((void*)buf, 1, read_cnt, fp);
 	
-	puts("Received file data");
+	printf("Received file data: %s\n",file_name);
 	write(sd, "Thank you", 10);
 	fclose(fp);
 	close(sd);
