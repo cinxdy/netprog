@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 	if (pid == 0)     // if Child Process
 	{
 		puts("Hi I'am a child process");
+		sleep(10);
 	}
 	else
 	{
