@@ -25,23 +25,23 @@ int main(int argc, char *argv[])
 	sigaction(SIGCHLD, &act, 0);
 
 	pid = fork();
-	if (pid == 0)
+	if (pid == 0) // Child #1
 	{
 		puts("Hi! I'm child process");
 		sleep(10);
 		return 12;
 	}
-	else
+	else // Parent
 	{
-		printf("Child proc id: %d \n", pid);
+		printf("Child proc id: %d \n", pid); // Child #1's id
 		pid = fork();
-		if (pid == 0)
+		if (pid == 0) // Child #2
 		{
 			puts("Hi! I'm child process");
 			sleep(10);
 			exit(24);
 		}
-		else
+		else // Parent
 		{
 			int i;
 			printf("Child proc id: %d \n", pid);
