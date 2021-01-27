@@ -59,7 +59,10 @@ int main(int argc, char *argv[])
 		{
 			close(serv_sock);
 			while ((str_len = read(clnt_sock, buf, BUF_SIZE)) != 0)
+			{
+				printf("%s",buf);
 				write(clnt_sock, buf, str_len);
+			}
 			
 			close(clnt_sock);
 			puts("client disconnected...");
