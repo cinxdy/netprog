@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
 		clnt_adr_sz = sizeof(clnt_adr);
 		str_len = recvfrom(serv_sock, message, BUF_SIZE, 0, 
 								(struct sockaddr*)&clnt_adr, &clnt_adr_sz);
+		message[str_len]=0;
+		printf("Received message: %s\n", message);
 		sendto(serv_sock, message, str_len, 0, 
 								(struct sockaddr*)&clnt_adr, clnt_adr_sz);
 	}	
