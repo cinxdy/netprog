@@ -16,12 +16,13 @@ int main(int argc, char *argv[])
 	char buf[BUF_SIZE];
 	int read_cnt, recv_size, file_size;
 	struct sockaddr_in serv_adr, from_adr;
+	socklen_t serv_adr_sz;
 	if (argc != 3) {
 		printf("Usage: %s <IP> <port>\n", argv[0]);
 		exit(1);
 	}
 	
-	fp = fopen("ufile_server.c", "wb");
+	fp = fopen("hello.dat", "wb");
 	sock = socket(PF_INET, SOCK_DGRAM, 0);   
 
 	memset(&serv_adr, 0, sizeof(serv_adr));
@@ -37,7 +38,9 @@ int main(int argc, char *argv[])
 	printf("%s\n", buf);
 
 	// TODO: Receive file size
-	
+	read(sock, buf, BUF_SIZE);
+	file_size = atoi(buf);
+
 	printf("File size=%d bytes\n", file_size);
 	
 	memset(buf, 0, BUF_SIZE);
@@ -46,6 +49,14 @@ int main(int argc, char *argv[])
 	while (recv_size < file_size)
 	{
 		// TODO: Receive file data 
+		read_cnt = read(sock, buf, BUF_SIZE);
+		buf[read_cnt]=0;
+		fwrite(buf, BUF_SIZE, 1, fp);
+		recv_size += read_cnt;
+
+		if(read_cnt < BUF_SIZE){
+			break;
+		}
 	}
 	
 	puts("Received file data");

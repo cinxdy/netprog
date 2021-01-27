@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 	
-	fp = fopen("ufile_server.c", "rb"); 
+	fp = fopen("hello.txt", "rb"); 
 	serv_sock = socket(PF_INET, SOCK_DGRAM, 0);   
 	
 	memset(&serv_adr, 0, sizeof(serv_adr));
@@ -41,10 +41,23 @@ int main(int argc, char *argv[])
 	printf("Client's message: %s\n", buf);
 
 	// TODO: Send file size to client 
+	fseek(fp, 0, SEEK_END);
+	file_size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	printf("File size: %d\n",file_size);
+
+	sprintf(buf, "%d", file_size);
+	sendto(serv_sock, buf, BUF_SIZE, 0, 
+				(struct sockaddr*)&clnt_adr, clnt_adr_sz);
 
 	while(1)
 	{
 		// TODO: Send file data to client 
+		read_cnt = fread(buf, sizeof(char), BUF_SIZE, fp);
+		sendto(serv_sock, buf, read_cnt, 0, 
+				(struct sockaddr*)&clnt_adr, clnt_adr_sz);
+		if(read_cnt < BUF_SIZE)
+			break;
 	}
 	
 	recvfrom(serv_sock, buf, BUF_SIZE, 0, 
