@@ -51,8 +51,17 @@ void read_routine(int sock, char *buf)
 	fp = fopen("echoclntmsg.txt", "w");
 	
 	// TODO: create pipe & fork 
+	pipe(fds);
+	pid2 = fork();
 
 	// TODO: store received echo message 
+	if(pid2==0){
+		while(1){
+			int read_cnt = read(fds[0], buf, BUF_SIZE);
+			fwrite(buf, 1, read_cnt, fp);
+			fflush(fp);
+		}
+	}
 
 	while (1)
 	{
@@ -73,6 +82,7 @@ void write_routine(int sock, char *buf)
 {
 	while (1)
 	{
+		fputs("Input message(Q to quit): \n", stdout);
 		fgets (buf, BUF_SIZE, stdin);
 
 		if (!strcmp(buf,"q\n") || !strcmp(buf,"Q\n"))
