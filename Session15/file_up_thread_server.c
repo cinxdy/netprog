@@ -9,6 +9,7 @@
 #define BUF_SIZE 1024
 void error_handling(char *message);
 void *handle_client(void *arg);
+pthread_mutex_t mutx;
 
 int main(int argc, char *argv[])
 {
@@ -41,7 +42,8 @@ int main(int argc, char *argv[])
 		clnt_sd = accept(serv_sd, (struct sockaddr*)&clnt_adr, &clnt_adr_sz);	
 
 		// TODO: pthread_create & detach 
-
+		pthread_create(&thread, NULL, handle_client, (void*)&clnt_sd);
+		pthread_detach(thread);
 
 		printf("Connected client IP(sock=%d): %s \n", clnt_sd, inet_ntoa(clnt_adr.sin_addr));
 	}
@@ -53,7 +55,30 @@ int main(int argc, char *argv[])
 void *handle_client(void *arg)
 {
 	// TODO: file receiving 
+	int clnt_sock = *((int*)arg);
+	char buf[BUF_SIZE];
+	char file_name[BUF_SIZE];
+	int str_len;
+
+	pthread_mutex_lock(&mutx);
+	str_len = read(clnt_sock, file_name, 32);
+	file_name[str_len]=0;
+
+	strcat(file_name, ".dat"); 
+
+	FILE* fp = fopen(file_name, "wb");
+
+	while ((str_len = read(clnt_sock, buf, BUF_SIZE)) != 0)
+	{
+		fwrite(buf, 1, str_len, fp);
+		fflush(fp);
+	}
 	
+	write(clnt_sock, "Thank you", BUF_SIZE);
+	close(clnt_sock);
+	fclose(fp);
+	pthread_mutex_unlock(&mutx);
+
 	return NULL;
 }
 

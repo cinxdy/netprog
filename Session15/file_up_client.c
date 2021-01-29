@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 		read_cnt = fread((void*)buf, 1, BUF_SIZE, fp);
 		read_size += read_cnt;
 		if (read_size % 1024 == 0)
-			printf("Recv %d bytes \n", read_size);
+			printf("Sent %d bytes \n", read_size);
 
 		if (read_cnt < BUF_SIZE)
 		{
