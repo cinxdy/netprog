@@ -123,7 +123,7 @@ void send_data(FILE* fp, char* ct, char* file_name)
 
 	printf("file_name: %s(%dbytes)\n", file_name, file_size);
 
-	/* Çì´õ Á¤º¸ Àü¼Û */
+	/* ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ */
 	fputs(protocol, fp);
 	fputs(server, fp);
 	fputs(cnt_len, fp);
@@ -131,7 +131,8 @@ void send_data(FILE* fp, char* ct, char* file_name)
 
 	// TODO: read file data from the file and send to the client 
 	// Hint: use fread() and fwrite() 
-
+	while((fread(buf, 1, BUF_SIZE, send_file)) != 0)
+		fwrite(buf, 1, BUF_SIZE, fp);
 	fflush(fp);
 	fclose(fp);
 }
@@ -146,8 +147,8 @@ char* content_type(char* file)
 	
 	if (!strcmp(extension, "html") || !strcmp(extension, "htm")) 
 		return "text/html";
-	else if ()// TODO: check the extension of jpg --> return "image/jpeg"
-		return ;
+	else if (!strcmp(extension, "jpg"))// TODO: check the extension of jpg --> return "image/jpeg"
+		return "image/jpeg";
 	else
 		return "text/plain";
 }
@@ -159,7 +160,7 @@ void send_error(FILE* fp)
 	char cnt_len[] = "Content-length:2048\r\n";
 	char cnt_type[] = "Content-type:text/html\r\n\r\n";
 	char content[] = "<html><head><title>NETWORK</title></head>"
-	       "<body><font size=+5><br>¿À·ù ¹ß»ý! ¿äÃ» ÆÄÀÏ¸í ¹× ¿äÃ» ¹æ½Ä È®ÀÎ!"
+	       "<body><font size=+5><br>ï¿½ï¿½ï¿½ï¿½ ï¿½ß»ï¿½! ï¿½ï¿½Ã» ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ È®ï¿½ï¿½!"
 		   "</font></body></html>";
 
 	fputs(protocol, fp);
